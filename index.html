@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="app.js"></script>
+    <script src="service.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</head>
+
+<body ng-controller="indexController">
+    <div class="cssload-thecube" ng-if="dataLogin[0] == null && dataLogin[1] == null">
+	<div class="cssload-cube cssload-c1"></div>
+	<div class="cssload-cube cssload-c2"></div>
+	<div class="cssload-cube cssload-c4"></div>
+	<div class="cssload-cube cssload-c3"></div>
+</div>
+    <div class="container" ng-if="dataLogin[0] != null && dataLogin[1] != null">
+        <div class="jumbotron" ng-if="toggleNode == false">
+            <div class="form-group" id="login">
+                Username :
+                <input type="text" class="form-control" ng-model="username">
+                <br /> Password :
+                <input type="password" class="form-control" ng-model="password">
+                <br>
+                <button class="btn btn-primary" ng-click="login()">Login</button>
+            </div>
+        </div>
+        <div id="content" class="jumbotron" ng-if="toggleNode == true && dataNode != null">
+
+            <nav class="navbar">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <button class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
+                    </ul>
+                </div>
+            </nav>
+            
+            <h1>Pin On</h1>
+            <div class="panel panel-default" ng-repeat="data in dataNode" ng-if="data.toggle != 0">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Pin #{{$index+1}}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-6">Status : {{ returnStatus(data.status) }}</div>
+                    <div class="col-xs-6">
+                        <button class="btn btn-success" ng-click="setStatusOn($index)" ><i class="fa fa-check-circle" aria-hidden="true"></i> On</button>
+                        <button class="btn btn-danger" ng-click="setStatusOff($index)"  ><i class="fa fa-times-circle"  aria-hidden="true"></i> Off</button>
+                        ||
+                         <button class="btn btn-danger" ng-click="offPin($index)" ><i class="fa fa-check-circle" aria-hidden="true"></i> Deactivate </button> 
+                    </div>
+                </div>
+            </div>
+            
+            <h1>Pin Off</h1>
+            <button class="btn btn-primary" ng-click="toggleActivate = !toggleActivate">Expand</button>
+            <div id="unactive" ng-if="toggleActivate == true">
+            <div class="panel panel-default" ng-repeat="data in dataNode" ng-if="data.toggle != 1">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Pin #{{$index+1}}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-12">
+                        <button class="btn btn-success" ng-click="onPin($index)" ><i class="fa fa-check-circle" aria-hidden="true"></i> Activate </button> 
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+{{dataNode}}
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyCJc_zdnXTypyvDDHpZRIxfp98-TzjM3aA",
+            authDomain: "dk-ct-cc62b.firebaseapp.com",
+            databaseURL: "https://dk-ct-cc62b.firebaseio.com",
+            projectId: "dk-ct-cc62b",
+            storageBucket: "dk-ct-cc62b.appspot.com",
+            messagingSenderId: "774109229272"
+        };
+        firebase.initializeApp(config);
+    </script>
+    
+    <button class="btn btn-default" ng-click="debug()">Debug</button>
+</body>
+
+</html>
